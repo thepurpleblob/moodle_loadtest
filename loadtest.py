@@ -2,6 +2,7 @@ import ws
 import logging
 import threading
 import time
+from datetime import datetime
 import concurrent.futures
 from pprint import pprint
 
@@ -9,8 +10,12 @@ HOSTNAME = 'http://ubuntu.local/moodle37'
 CMID = 89
 BASEUSER = 'ftestuser'
 PASSWORD = 'orange'
+MAXWORKERS = 25
 
-
+def printtime(message):
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print(message, current_time)
 
 def doit(index):
     username = BASEUSER + str(index)
@@ -25,5 +30,8 @@ def doit(index):
     print('Completed user ', username)
 
 
-with concurrent.futures.ThreadPoolExecutor(max_workers = 100) as executor:
+printtime('Start time')
+with concurrent.futures.ThreadPoolExecutor(max_workers = MAXWORKERS) as executor:
     executor.map(doit, range(2, 450))
+
+printtime('End time')
